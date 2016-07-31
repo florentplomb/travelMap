@@ -1,18 +1,18 @@
 'use strict';
 
 import mongoose from 'mongoose';
+import {Schema} from 'mongoose';
 
 var PostSchema = new mongoose.Schema({
-  	type: String,
-  	active: Boolean,
+	type: String,
+	active: Boolean,
 	properties: {
 		created_at : {type: Date, default: Date.now},
-		user: String,
-		icon: String,
-		markerColor: String,
-		title:String,
+		user: { type: Schema.Types.ObjectId, ref: 'User' },
+		imageId : String,
 		message:String,
-		distance: Number,
+		markerColor: String,
+		icon: String
 	},
 	geometry: Schema.Types.Mixed
 });

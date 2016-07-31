@@ -1,8 +1,8 @@
 'use strict';
 
-var appDetails = angular.module('travelMapApp');
+var appMap = angular.module('travelMapApp');
 
-appDetails.controller('MapCtrl', function($scope,$state) {
+appMap.controller('MapCtrl', function($scope,$state) {
 
 	$scope.london = {
 		lat: 19.594725484073255,
