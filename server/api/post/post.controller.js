@@ -7,12 +7,26 @@
  * DELETE  /api/posts/:id          ->  destroy
  */
 
-'use strict';
+ 'use strict';
 
-import _ from 'lodash';
-import Post from './post.model';
+ import _ from 'lodash';
+ import Post from './post.model';
+ var fs = require('fs');
+ //var multer = require('multer');
 
-function respondWithResult(res, statusCode) {
+//  var storage =   multer.diskStorage({
+//   destination: function (req, file, callback) {
+//     callback(null, './uploads');
+//   },
+//   filename: function (req, file, callback) {
+//     callback(null, file.fieldname + '-' + Date.now());
+//   }
+// });
+// var upload = multer({ storage : storage}).single('userPhoto')
+
+
+
+ function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
     if (entity) {
@@ -25,9 +39,9 @@ function saveUpdates(updates) {
   return function(entity) {
     var updated = _.merge(entity, updates);
     return updated.save()
-      .then(updated => {
-        return updated;
-      });
+    .then(updated => {
+      return updated;
+    });
   };
 }
 
@@ -35,9 +49,9 @@ function removeEntity(res) {
   return function(entity) {
     if (entity) {
       return entity.remove()
-        .then(() => {
-          res.status(204).end();
-        });
+      .then(() => {
+        res.status(204).end();
+      });
     }
   };
 }
@@ -62,23 +76,30 @@ function handleError(res, statusCode) {
 // Gets a list of Posts
 export function index(req, res) {
   return Post.find().exec()
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+  .then(respondWithResult(res))
+  .catch(handleError(res));
 }
 
 // Gets a single Post from the DB
 export function show(req, res) {
   return Post.findById(req.params.id).exec()
-    .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+  .then(handleEntityNotFound(res))
+  .then(respondWithResult(res))
+  .catch(handleError(res));
 }
 
 // Creates a new Post in the DB
 export function create(req, res) {
-  return Post.create(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
+ 
+//  upload(req,res,function(err) {
+//   if(err) {
+//     return res.end("Error uploading file.");
+//   }
+//   res.end("File is uploaded");
+// });
+
+ return res.status(204).end();
+
 }
 
 // Updates an existing Post in the DB
@@ -87,16 +108,16 @@ export function update(req, res) {
     delete req.body._id;
   }
   return Post.findById(req.params.id).exec()
-    .then(handleEntityNotFound(res))
-    .then(saveUpdates(req.body))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+  .then(handleEntityNotFound(res))
+  .then(saveUpdates(req.body))
+  .then(respondWithResult(res))
+  .catch(handleError(res));
 }
 
 // Deletes a Post from the DB
 export function destroy(req, res) {
   return Post.findById(req.params.id).exec()
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
+  .then(handleEntityNotFound(res))
+  .then(removeEntity(res))
+  .catch(handleError(res));
 }
