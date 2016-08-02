@@ -76,9 +76,10 @@ export function show(req, res) {
 
 // Creates a new Post in the DB
 export function create(req, res) {
-  return Post.create(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
+
+  console.log (req.body);
+  return respondWithResult(res, 201)
+    
 }
 
 // Updates an existing Post in the DB
