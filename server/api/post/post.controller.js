@@ -90,16 +90,10 @@ export function show(req, res) {
 
 // Creates a new Post in the DB
 export function create(req, res) {
- 
-//  upload(req,res,function(err) {
-//   if(err) {
-//     return res.end("Error uploading file.");
-//   }
-//   res.end("File is uploaded");
-// });
 
- return res.status(204).end();
-
+  console.log (req.body);
+  return respondWithResult(res, 201)
+    
 }
 
 // Updates an existing Post in the DB

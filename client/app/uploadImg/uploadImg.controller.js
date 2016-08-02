@@ -2,21 +2,18 @@
 
 var appUploadImg = angular.module('travelMapApp');
 
-
-
-
-appUploadImg.controller('uploadImgCtrl', function($scope , $state,Upload, $timeout){
+appUploadImg.controller('uploadImgCtrl', function($scope , $state,Upload, $timeout,$http){
 
 
   $http({
-  method: 'POST',
-  data : {'username': 'hello'},
-  url: 'http://localhost:9000/api/posts'
-}).then(function successCallback(response) {
+    method: 'POST',
+    data : {'username': 'hello'},
+    url: 'http://localhost:9000/api/posts'
+  }).then(function successCallback(response) {
     console.log("ok");
   }, function errorCallback(response) {
-      
-      console.log("error");
+
+    console.log("error");
   });
   // $scope.uploadPic = function(file) {
   //   file.upload = Upload.upload({
@@ -26,8 +23,6 @@ appUploadImg.controller('uploadImgCtrl', function($scope , $state,Upload, $timeo
   //     },
   //    data: {'username' : $scope.username, 'file': file},
   //   });
-  //   console.log(file.type);
-
   //   file.upload.then(function (response) {
   //     $timeout(function () {
   //       file.result = response.data;
