@@ -11,7 +11,12 @@
 
  import _ from 'lodash';
  import Post from './post.model';
- var fs = require('fs');
+ var crypto = require('crypto');
+ var http = require('http'),
+ formidable = require('formidable'),
+ fs = require('fs'),
+ path = require('path');
+ var multer  = require('multer');
  //var multer = require('multer');
 
 //  var storage =   multer.diskStorage({
@@ -26,7 +31,7 @@
 
 
 
- function respondWithResult(res, statusCode) {
+function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
     if (entity) {
@@ -91,9 +96,36 @@ export function show(req, res) {
 // Creates a new Post in the DB
 export function create(req, res) {
 
-  console.log (req.body);
-  return respondWithResult(res, 201)
-    
+ var form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+        // `file` is the name of the <input> field of type `file`
+console.log(files.file.name);
+        var old_path = files.file.path,
+            file_size = files.file.size,
+            file_ext = files.file.name.split('.').pop(),
+            index = old_path.lastIndexOf('/') + 1,
+            file_name = old_path.substr(index),
+            new_path = 'server/upload' + file_name + '.' + file_ext;
+           // new_path = path.join(process.env.PWD, '/upload', file_name + '.' + file_ext);
+         console.log(file_name);
+         console.log(old_path);
+        fs.readFile(old_path, function(err, data) {
+            fs.writeFile("server/upload/okkk.jpg", data, function(err) {
+                fs.unlink(old_path, function(err) {
+                    if (err) {
+                        res.status(500);
+                        res.json({'success': false});
+                    } else {
+                        res.status(200);
+                        res.json({'success': true});
+                    }
+                });
+            });
+        });
+    });
+
+
+
 }
 
 // Updates an existing Post in the DB

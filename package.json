@@ -16,6 +16,7 @@
     "express": "^4.13.3",
     "express-jwt": "^3.0.0",
     "express-session": "^1.11.3",
+    "formidable": "^1.0.17",
     "jsonwebtoken": "^7.0.0",
     "lodash": "^4.6.1",
     "lusca": "^1.4.1",
