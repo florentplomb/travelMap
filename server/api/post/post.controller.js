@@ -11,27 +11,16 @@
 
  import _ from 'lodash';
  import Post from './post.model';
- var crypto = require('crypto');
- var http = require('http'),
+ var crypto = require('crypto'),
+ http = require('http'),
  formidable = require('formidable'),
  fs = require('fs'),
- path = require('path');
- var multer  = require('multer');
- //var multer = require('multer');
-
-//  var storage =   multer.diskStorage({
-//   destination: function (req, file, callback) {
-//     callback(null, './uploads');
-//   },
-//   filename: function (req, file, callback) {
-//     callback(null, file.fieldname + '-' + Date.now());
-//   }
-// });
-// var upload = multer({ storage : storage}).single('userPhoto')
+ path = require('path'),
+ uuid = require('node-uuid');
+ 
 
 
-
-function respondWithResult(res, statusCode) {
+ function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
     if (entity) {
@@ -96,33 +85,49 @@ export function show(req, res) {
 // Creates a new Post in the DB
 export function create(req, res) {
 
- var form = new formidable.IncomingForm();
-    form.parse(req, function(err, fields, files) {
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files) {
         // `file` is the name of the <input> field of type `file`
-console.log(files.file.name);
+        console.log(fields);
+
         var old_path = files.file.path,
-            file_size = files.file.size,
-            file_ext = files.file.name.split('.').pop(),
-            index = old_path.lastIndexOf('/') + 1,
-            file_name = old_path.substr(index),
-            new_path = 'server/upload' + file_name + '.' + file_ext;
+        file_size = files.file.size,
+        file_ext = files.file.name.split('.').pop(),
+        file_name = uuid.v1(),
+        new_path = 'server/upload/' + file_name + '.' + file_ext; // Generate a v1 (time-based) id , v4 (random)
            // new_path = path.join(process.env.PWD, '/upload', file_name + '.' + file_ext);
-         console.log(file_name);
-         console.log(old_path);
-        fs.readFile(old_path, function(err, data) {
-            fs.writeFile("server/upload/okkk.jpg", data, function(err) {
-                fs.unlink(old_path, function(err) {
-                    if (err) {
-                        res.status(500);
-                        res.json({'success': false});
-                    } else {
-                        res.status(200);
-                        res.json({'success': true});
-                    }
-                });
+           console.log(new_path.toString());
+           fs.readFile(old_path, function(err, data) {
+            fs.writeFile(new_path.toString(), data, function(err) {
+              fs.unlink(old_path, function(err) {
+                if (err) {
+                  res.status(500);
+                  res.json({'success': false});
+                } else {
+                 var newPost = {
+                  type : 'Feature',
+                  active : true,
+                  properrties :{
+                    user : "Florent",
+                    imageId : file_name + '.' + file_ext,
+                    message : fields.imgMessage,
+                  },
+                  geometry: {
+                    coordinates : [],
+                    type : "Point"
+                  }
+                };
+
+                  newPost.geometry.coordinates.push(fields.lat);
+                  newPost.geometry.coordinates.push(fields.lng);
+                console.log(newPost);
+                res.status(200);
+                res.json({'success': true});
+              }
             });
-        });
-    });
+            });
+          });
+         });
 
 
 
