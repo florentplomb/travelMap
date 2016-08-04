@@ -119,8 +119,7 @@ export function create(req, res) {
                 coordinates: [],
                 type: "Point"
               }
-            };
-
+            };  
             newPost.geometry.coordinates.push(fields.lat);
             newPost.geometry.coordinates.push(fields.lng);
             console.log(newPost);
