@@ -17,7 +17,7 @@
  fs = require('fs'),
  path = require('path'),
  uuid = require('node-uuid');
- 
+
 
 
  function respondWithResult(res, statusCode) {
@@ -87,47 +87,57 @@ export function create(req, res) {
 
   var form = new formidable.IncomingForm();
   form.parse(req, function(err, fields, files) {
-        // `file` is the name of the <input> field of type `file`
-        console.log(fields);
+    // `file` is the name of the <input> field of type `file`
+    console.log(fields);
 
-        var old_path = files.file.path,
-        file_size = files.file.size,
-        file_ext = files.file.name.split('.').pop(),
-        file_name = uuid.v1(),
-        new_path = 'server/upload/' + file_name + '.' + file_ext; // Generate a v1 (time-based) id , v4 (random)
-           // new_path = path.join(process.env.PWD, '/upload', file_name + '.' + file_ext);
-           console.log(new_path.toString());
-           fs.readFile(old_path, function(err, data) {
-            fs.writeFile(new_path.toString(), data, function(err) {
-              fs.unlink(old_path, function(err) {
-                if (err) {
-                  res.status(500);
-                  res.json({'success': false});
-                } else {
-                 var newPost = {
-                  type : 'Feature',
-                  active : true,
-                  properrties :{
-                    user : "Florent",
-                    imageId : file_name + '.' + file_ext,
-                    message : fields.imgMessage,
-                  },
-                  geometry: {
-                    coordinates : [],
-                    type : "Point"
-                  }
-                };
+    var old_path = files.file.path,
+    file_size = files.file.size,
+    file_ext = files.file.name.split('.').pop(),
+    file_name = uuid.v1(),
+      new_path = 'server/upload/' + file_name + '.' + file_ext; // Generate a v1 (time-based) id , v4 (random)
+    // new_path = path.join(process.env.PWD, '/upload', file_name + '.' + file_ext);
+    console.log(new_path.toString());
+    fs.readFile(old_path, function(err, data) {
+      fs.writeFile(new_path.toString(), data, function(err) {
+        fs.unlink(old_path, function(err) {
+          if (err) {
+            res.status(500);
+            res.json({
+              'success': false
+            });
+          } else {
 
-                  newPost.geometry.coordinates.push(fields.lat);
-                  newPost.geometry.coordinates.push(fields.lng);
-                console.log(newPost);
-                res.status(200);
-                res.json({'success': true});
+            var newPost = {
+              type: 'Feature',
+              active: true,
+              properties: {
+                user: "57a2ac6cb4914f5818dc05c5",
+                imageId: file_name + '.' + file_ext,
+                message: fields.imgMessage
+              },
+              geometry: {
+                coordinates: [],
+                type: "Point"
               }
-            });
-            });
-          });
-         });
+            };
+
+            newPost.geometry.coordinates.push(fields.lat);
+            newPost.geometry.coordinates.push(fields.lng);
+            console.log(newPost);
+            return Post.create(newPost)
+            .then(respondWithResult(res, 201))
+            .catch(handleError(res));
+
+            // res.status(200);
+            // res.json({
+            //   'success': true
+            // });
+          }
+
+        });
+      });
+    });
+  });
 
 
 
