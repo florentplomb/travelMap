@@ -5,6 +5,7 @@ var appMap = angular.module('travelMapApp');
 appMap.controller('MapCtrl', function($scope, $state,$http) {
 
  $scope.markers = [];
+ $scope.imgCompletUrl = "Flor";
 
  $scope.london = {
     lat: 19.594725484073255,
@@ -35,11 +36,12 @@ appMap.controller('MapCtrl', function($scope, $state,$http) {
         $scope.rawMarkers = data;
         console.log("rawmaker:" + data);
         angular.forEach(data, function(value, key) {
+            $scope.imgCompletUrl = "http://localhost:9000/api/images/"+value.imageId;
             $scope.markers.push({
                 lng: Number(-+value.geometry.coordinates[1]), 
                 lat: Number(value.geometry.coordinates[0]),
-                message: value._id,
-                imageId: "kikou"});   
+                message: '<div> <img style="float: left;" http-src="{{imgCompletUrl}}" width="20px"/> </div>',
+                imageId: value.imageId});   
             console.log($scope.markers);
         });
     })
@@ -49,61 +51,41 @@ appMap.controller('MapCtrl', function($scope, $state,$http) {
 
 
 
-    // *** get markers *** //
+    })
 
-    // flowersService.getflowers(function(err, flowers) {
-    //     if (err) {
+appMap.directive('httpSrc', [
+        '$http', function ($http) {
+            var directive = {
+                link: link,
+                restrict: 'A'
+            };
+            return directive;
 
-    //         $ionicLoading.hide();
-    //         $scope.showAlert("Publication indisponible");
-    //         $scope.error = err;
+            function link(scope, element, attrs) {
+                var requestConfig = {
+                    method: 'Get',
+                    headers: {kikou:"kikou" },
+                    url: attrs.httpSrc,
+                    responseType: 'arraybuffer',
+                    cache: 'true'
+                };
 
-    //     } else {
+                $http(requestConfig)
+                    .success(function(data) {
+                        var arr = new Uint8Array(data);
 
-    //         angular.forEach(flowers, function(flower) {
+                        var raw = '';
+                        var i, j, subArray, chunk = 5000;
+                        for (i = 0, j = arr.length; i < j; i += chunk) {
+                            subArray = arr.subarray(i, i + chunk);
+                            raw += String.fromCharCode.apply(null, subArray);
+                        }
 
+                        var b64 = btoa(raw);
 
-    //             $scope.urlImgID = apiUrl + "/images/";
+                        attrs.$set('src', "data:image/jpeg;base64," + b64);
+                    });
+            }
 
-    //             $scope.markers.push({
-    //                 lng: parseFloat(flower.geometry.coordinates[0]),
-    //                 lat: parseFloat(flower.geometry.coordinates[1]),
-    //                 id: flower._id,
-    //                 icon: flowerIcon,
-    //                 group: 'yverdon',
-    //                 message: '<div ng-click="goDetail(flower._id)"><img style="float: left;" src="img/flower8.png" width="20px"/> <p>{{flower.properties.espece.NOMC}} <p style="font-style:italic; line-height: 24px;" ng-hide="flower.properties.espece.NOMC"> Indéfinie </p>  </p><img align="center" ng-src="{{urlImgID+flower.properties.image}}" style="margin-top: -12px;" width="90px"/><a style="display:block; text-align:center;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
-
-    //                 getMessageScope: function() {
-    //                     var scope = $scope.$new();
-    //                     scope.flower = flower;
-    //                     return scope;
-    //                 }
-
-    //             });
-
-    //         })
-    //     }
-
-    // });
-
-
-})
-
-
-
-// (function(){
-
-// class MapComponent {
-//   constructor() {
-//     this.message = 'Hello';
-//   }
-// }
-
-// angular.module('travelMapApp')
-//   .component('map', {
-//     templateUrl: 'app/map/map.html',
-//     controller: MapComponent,
-//     controllerAs: 'mapCtrl'
-//   });
-
-// })();
+        }
+    ]);
