@@ -38,12 +38,13 @@ appMap.controller('MapCtrl', function($scope, $state,$http) {
             $scope.markers.push({
                 lng: Number(-+value.geometry.coordinates[1]), 
                 lat: Number(value.geometry.coordinates[0]),
-                message: value._id});   
+                message: value._id,
+                imageId: "kikou"});   
             console.log($scope.markers);
         });
     })
     .error(function(data) {
-        error(data);
+        alert(data);
     });
 
 
