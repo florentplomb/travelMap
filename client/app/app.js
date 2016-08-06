@@ -4,8 +4,13 @@ angular.module('travelMapApp', ['travelMapApp.auth', 'travelMapApp.admin', 'trav
     'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'validation.match','leaflet-directive'
     ,'ngFileUpload'
   ])
-  .config(function($urlRouterProvider, $locationProvider) {
+  .config(function($urlRouterProvider, $locationProvider,$httpProvider) {
+
+
+    $httpProvider.defaults.headers.get = { 'Florent' : '27ans' }; // test ok pour le header!
+
     $urlRouterProvider.otherwise('/');
+
 
     $locationProvider.html5Mode(true);
   });

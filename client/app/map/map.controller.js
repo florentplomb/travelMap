@@ -4,10 +4,11 @@ var appMap = angular.module('travelMapApp');
 
 appMap.controller('MapCtrl', function($scope, $state,$http) {
 
- $scope.markers = [];
- $scope.imgCompletUrl = "Flor";
 
- $scope.london = {
+   $scope.markers = [];
+
+
+   $scope.london = {
     lat: 19.594725484073255,
     lng: -155.41534423828125,
     zoom: 9
@@ -31,17 +32,23 @@ appMap.controller('MapCtrl', function($scope, $state,$http) {
             'login_token': 'login YmVlcDpi'
         }
     })
-    .success(function(data) {
+    .success(function(posts) {
 
-        $scope.rawMarkers = data;
-        console.log("rawmaker:" + data);
-        angular.forEach(data, function(value, key) {
-            $scope.imgCompletUrl = "http://localhost:9000/api/images/"+value.imageId;
+        $scope.rawMarkers = posts;
+        console.log(posts);
+        angular.forEach(posts, function(post, key) {
+            $scope.imgCompletUrl = "http://localhost:9000/api/images/"+post.properties.imageId;
+            console.log($scope.imgCompletUrl)
             $scope.markers.push({
-                lng: Number(-+value.geometry.coordinates[1]), 
-                lat: Number(value.geometry.coordinates[0]),
-                message: '<div> <img style="float: left;" http-src="{{imgCompletUrl}}" width="20px"/> </div>',
-                imageId: value.imageId});   
+                lng: Number(-+post.geometry.coordinates[1]), 
+                lat: Number(post.geometry.coordinates[0]),
+                message: '<div> <img style="float: left;" ng-src="{{imgCompletUrl}}"  width="20px"/> </div>',
+                imageId: post.properties.imageId,
+                getMessageScope: function() {
+                    var scope = $scope.$new();
+                    scope.post = post;
+                    return scope;
+                }});   
             console.log($scope.markers);
         });
     })
@@ -51,41 +58,42 @@ appMap.controller('MapCtrl', function($scope, $state,$http) {
 
 
 
-    })
+})
 
 appMap.directive('httpSrc', [
-        '$http', function ($http) {
-            var directive = {
-                link: link,
-                restrict: 'A'
+    '$http', function ($http) {
+        var directive = {
+            link: link,
+            restrict: 'A'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+            console.log(attrs.httpSrc);
+            var requestConfig = {
+                method: 'Get',
+                headers: {kikou:"kikou" },
+                url: attrs.httpSrc,
+                responseType: 'arraybuffer',
+                cache: 'true'
             };
-            return directive;
 
-            function link(scope, element, attrs) {
-                var requestConfig = {
-                    method: 'Get',
-                    headers: {kikou:"kikou" },
-                    url: attrs.httpSrc,
-                    responseType: 'arraybuffer',
-                    cache: 'true'
-                };
+            $http(requestConfig)
+            .success(function(data) {
+                var arr = new Uint8Array(data);
 
-                $http(requestConfig)
-                    .success(function(data) {
-                        var arr = new Uint8Array(data);
+                var raw = '';
+                var i, j, subArray, chunk = 5000;
+                for (i = 0, j = arr.length; i < j; i += chunk) {
+                    subArray = arr.subarray(i, i + chunk);
+                    raw += String.fromCharCode.apply(null, subArray);
+                }
 
-                        var raw = '';
-                        var i, j, subArray, chunk = 5000;
-                        for (i = 0, j = arr.length; i < j; i += chunk) {
-                            subArray = arr.subarray(i, i + chunk);
-                            raw += String.fromCharCode.apply(null, subArray);
-                        }
+                var b64 = btoa(raw);
 
-                        var b64 = btoa(raw);
-
-                        attrs.$set('src', "data:image/jpeg;base64," + b64);
-                    });
-            }
-
+                attrs.$set('src', "data:image/jpeg;base64," + b64);
+            });
         }
+
+    }
     ]);
