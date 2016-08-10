@@ -11,12 +11,15 @@
 
  import _ from 'lodash';
  import Post from './post.model';
+ import config from '../../config/environment';
  var crypto = require('crypto'),
  http = require('http'),
  formidable = require('formidable'),
  fs = require('fs'),
  path = require('path'),
- uuid = require('node-uuid');
+ uuid = require('node-uuid'),
+ Thumbnail = require('thumbnail'),
+ thumbnail = new Thumbnail(config.root+'/server/upload', config.root+'/server/upload');
 
 
 
@@ -112,7 +115,8 @@ export function create(req, res) {
               active: true,
               properties: {
                 user: "57a2ac6cb4914f5818dc05c5",
-                imageId: file_name + '.' + file_ext,
+                imageId: file_name,
+                imageExt: file_ext,
                 message: fields.imgMessage
               },
               geometry: {
@@ -123,6 +127,11 @@ export function create(req, res) {
             newPost.geometry.coordinates.push(fields.lat);
             newPost.geometry.coordinates.push(fields.lng);
             console.log(newPost);
+
+
+            thumbnail.ensureThumbnail(file_name + '.' + file_ext,100,null, function (err, filename) {
+              console.log(err);
+            });
             return Post.create(newPost)
             .then(respondWithResult(res, 201))
             .catch(handleError(res));

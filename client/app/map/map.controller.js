@@ -2,13 +2,19 @@
 
 var appMap = angular.module('travelMapApp');
 
-appMap.controller('MapCtrl', function($scope, $state,$http) {
+appMap.config(function($logProvider){
+  $logProvider.debugEnabled(false);
+});
+
+appMap.controller('MapCtrl', function($scope, $state,$http,$filter) {
 
 
-   $scope.markers = [];
+ $scope.markers = [];
+ $scope.sideCard = {};
+$scope.sideCard.title = "Aloha";
 
 
-   $scope.london = {
+ $scope.london = {
     lat: 19.594725484073255,
     lng: -155.41534423828125,
     zoom: 9
@@ -34,15 +40,13 @@ appMap.controller('MapCtrl', function($scope, $state,$http) {
     })
     .success(function(posts) {
 
-        $scope.rawMarkers = posts;
+        $scope.rawPosts = posts;
         console.log(posts);
         angular.forEach(posts, function(post, key) {
-            $scope.imgCompletUrl = "http://localhost:9000/api/images/"+post.properties.imageId;
-            console.log($scope.imgCompletUrl)
             $scope.markers.push({
                 lng: Number(-+post.geometry.coordinates[1]), 
                 lat: Number(post.geometry.coordinates[0]),
-                message: '<div> <img style="float: left;" ng-src="{{imgCompletUrl}}"  width="20px"/> </div>',
+                message: '<div class="clickable" ng-click="getPostSide(post._id)"> <img ng-src="http://localhost:9000/api/images/{{post.properties.imageId}}-100.{{post.properties.imageExt}}" width="70px;"/> </div> ',
                 imageId: post.properties.imageId,
                 getMessageScope: function() {
                     var scope = $scope.$new();
@@ -57,8 +61,33 @@ appMap.controller('MapCtrl', function($scope, $state,$http) {
     });
 
 
+    $scope.getPostSide = function (postId){
+
+        var postFound = $filter('getById')($scope.rawPosts, postId);
+        console.log(postFound);
+         $scope.sideCard.title = "Aloha";
+         $scope.sideCard.date = postFound.properties.created_at;
+         console.log($scope.sideCard.date);
+        // console.log(postId);
+        // console.log($scope.rawPosts);
+
+    };
 
 })
+
+// Filter pour chercher dans mon array de posts un post avec un certain ID
+
+appMap.filter('getById', function() {
+  return function(input, id) {
+    var i=0, len=input.length;
+    for (; i<len; i++) {
+      if (input[i]._id == id) {
+        return input[i];
+    }
+}
+return null;
+}
+});
 
 appMap.directive('httpSrc', [
     '$http', function ($http) {
