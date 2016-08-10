@@ -9,12 +9,11 @@ appMap.config(function($logProvider){
 appMap.controller('MapCtrl', function($scope, $state,$http,$filter) {
 
 
- $scope.markers = [];
- $scope.sideCard = {};
-$scope.sideCard.title = "Aloha";
+   $scope.markers = [];
+   $scope.sideCard = {};
 
 
- $scope.london = {
+   $scope.london = {
     lat: 19.594725484073255,
     lng: -155.41534423828125,
     zoom: 9
@@ -65,9 +64,15 @@ $scope.sideCard.title = "Aloha";
 
         var postFound = $filter('getById')($scope.rawPosts, postId);
         console.log(postFound);
-         $scope.sideCard.title = "Aloha";
-         $scope.sideCard.date = postFound.properties.created_at;
-         console.log($scope.sideCard.date);
+        $scope.sideCard.image = "http://localhost:9000/api/images/"+postFound.properties.imageId+"."+postFound.properties.imageExt;
+        $scope.sideCard.title = "Big Island";
+        $scope.sideCard.subTitle = postFound.properties.subTitle;
+        $scope.sideCard.message = postFound.properties.message;
+        $scope.sideCard.user = "Florent";
+        $scope.sideCard.date = postFound.properties.created_at;
+
+
+        console.log($scope.sideCard.date);
         // console.log(postId);
         // console.log($scope.rawPosts);
 

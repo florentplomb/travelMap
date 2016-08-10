@@ -9,9 +9,12 @@ var PostSchema = new mongoose.Schema({
 	properties: {
 		created_at : {type: Date, default: Date.now},
 		user: { type: Schema.Types.ObjectId, ref: 'User' },
+		dateTaken: {type: Date},
 		imageId : String,
 		imageExt : String,
 		message:String,
+		title:String,
+		subtitle:String,
 		markerColor: String,
 		icon: String
 	},

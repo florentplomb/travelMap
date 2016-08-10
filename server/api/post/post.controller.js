@@ -91,7 +91,10 @@ export function create(req, res) {
   var form = new formidable.IncomingForm();
   form.parse(req, function(err, fields, files) {
     // `file` is the name of the <input> field of type `file`
-    console.log(fields);
+    
+
+    var uplPost = JSON.stringify(fields.uplPost)
+    console.log(uplPost);
 
     var old_path = files.file.path,
     file_size = files.file.size,
@@ -117,7 +120,10 @@ export function create(req, res) {
                 user: "57a2ac6cb4914f5818dc05c5",
                 imageId: file_name,
                 imageExt: file_ext,
-                message: fields.imgMessage
+                message: uplPost.message,
+                title:uplPost.title,
+                subTitle:uplPost.subTitle,
+                dateTaken:uplPost.dateTaken
               },
               geometry: {
                 coordinates: [],

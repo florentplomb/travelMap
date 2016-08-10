@@ -7,14 +7,20 @@ appUploadImg.controller('uploadImgCtrl', function($scope,Upload,$http,$timeout){
 
  $scope.uploadPic = function(file) {
 
+ 
   EXIF.getData(file, function(){
 
     $scope.lat = toDecimal(EXIF.getTag(this, "GPSLatitude"));
     $scope.lng = toDecimal(EXIF.getTag(this, "GPSLongitude"));
+    $scope.uplPost.dateTaken = EXIF.getTag(this, "DateTimeOriginal");
+  // console.log($scope.uplPost.dateTaken);
    
+   
+   
+  
     file.upload = Upload.upload({
       url: 'http://localhost:9000/api/posts',
-      data: {imgMessage: $scope.imgMessage, lat : $scope.lat, lng: $scope.lng , file: file},
+      data: {uplPost: $scope.uplPost, lat : $scope.lat, lng: $scope.lng , file: file},
     });
 
     file.upload.then(function (response) {

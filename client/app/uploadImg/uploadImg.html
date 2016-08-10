@@ -3,26 +3,29 @@
 <div ng-controller="uploadImgCtrl">
 
 
-       <form name="myForm">
-    <fieldset>
-      <legend>Upload on form submit</legend>
-      Username:
-      <input type="text" name="message" ng-model="imgMessage"  required>
-      <i ng-show="myForm.userName.$error.required">*required</i>
-      <br>Photo:
-      <input type="file" ngf-select ng-model="picFile" name="file"    
-             accept="image/*" ngf-max-size="2MB" required
-             ngf-model-invalid="errorFile">
-      <i ng-show="myForm.file.$error.required">*required</i><br>
-      <i ng-show="myForm.file.$error.maxSize">File too large 
-          {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+ <form name="myForm">
+  <fieldset>
+    <legend>Upload on form submit</legend>
+    <br>Title
+    <input type="text" name="title" ng-model="uplPost.title">
+    <br>SubTitle
+    <input type="text" name="subTitle" ng-model="uplPost.subTitle">
+    <br>Message:
+    <textarea type="text" name="message" ng-model="uplPost.message"/>
+    <br>Photo:
+    <input type="file" ngf-select ng-model="picFile" name="file"    
+    accept="image/*" ngf-max-size="2MB" required
+    ngf-model-invalid="errorFile">
+    <i ng-show="myForm.file.$error.required">*required</i><br>
+    <i ng-show="myForm.file.$error.maxSize">File too large 
+      {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
       <img ng-show="myForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
       <br>
       <button ng-disabled="!myForm.$valid" 
-              ng-click="uploadPic(picFile)">Submit</button>
+      ng-click="uploadPic(picFile)">Submit</button>
       <span class="progress" ng-show="picFile.progress >= 0">
         <div style="width:{{picFile.progress}}%" 
-            ng-bind="picFile.progress + '%'"></div>
+        ng-bind="picFile.progress + '%'"></div>
       </span>
       <span ng-show="picFile.result">Upload Successful</span>
       <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
@@ -30,5 +33,47 @@
     <br>
   </form>
 
+  <div class="wrapper">
 
-</div>
+    <div class="card radius shadowDepth1">
+     <div class="card__image border-tlr-radius">
+      <img src="picFile" alt="image" class="border-tlr-radius">
+    </div>
+
+    <div class="card__content card__padding">
+                   <!--  <div class="card__share">
+                        <div class="card__social">  
+                            <a class="share-icon facebook" href="#"><span class="fa fa-facebook"></span></a>
+                            <a class="share-icon twitter" href="#"><span class="fa fa-twitter"></span></a>
+                            <a class="share-icon googleplus" href="#"><span class="fa fa-google-plus"></span></a>
+                        </div>
+
+                        <a id="share" class="share-toggle share-icon" href="#"></a>
+                      </div> -->
+
+                      <div class="card__meta">
+                       <a href="#">{{uplPost.title}}</a>
+                       <time>{{uplPost.dateTaken | date:'mediumDate'}}</time>
+                     </div>
+
+                     <article class="card__article">
+                       <h2><a href="#">{{uplPost.subTitle}}</a></h2>
+
+                       <p>{{uplPost.message}}</p>
+                     </article>
+                   </div>
+
+                   <div class="card__action">
+
+                    <div class="card__author">
+                     <img src="" alt="user">
+                     <div class="card__author-content">
+                      By <a href="#">{{sideCard.user}}</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
