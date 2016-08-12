@@ -69,7 +69,7 @@ appMap.controller('MapCtrl', function($scope, $state,$http,$filter) {
         $scope.sideCard.subTitle = postFound.properties.subTitle;
         $scope.sideCard.message = postFound.properties.message;
         $scope.sideCard.user = "Florent";
-        $scope.sideCard.date = postFound.properties.created_at;
+        $scope.sideCard.date = postFound.properties.dateTaken;
 
 
         console.log($scope.sideCard.date);

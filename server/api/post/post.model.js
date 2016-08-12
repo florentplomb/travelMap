@@ -14,7 +14,7 @@ var PostSchema = new mongoose.Schema({
 		imageExt : String,
 		message:String,
 		title:String,
-		subtitle:String,
+		subTitle:String,
 		markerColor: String,
 		icon: String
 	},

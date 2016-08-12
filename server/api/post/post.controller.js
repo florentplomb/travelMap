@@ -90,11 +90,12 @@ export function create(req, res) {
 
   var form = new formidable.IncomingForm();
   form.parse(req, function(err, fields, files) {
-    // `file` is the name of the <input> field of type `file`
-    
+   
 
-    var uplPost = JSON.stringify(fields.uplPost)
-    console.log(uplPost);
+    var date = fields.dateTaken.toString().replace(/:/, "-"); // moche mais pas le temps pour une expr- regulière
+    var dateTaken = date.replace(/:/, "-");
+    console.log(dateTaken);
+
 
     var old_path = files.file.path,
     file_size = files.file.size,
@@ -120,27 +121,28 @@ export function create(req, res) {
                 user: "57a2ac6cb4914f5818dc05c5",
                 imageId: file_name,
                 imageExt: file_ext,
-                message: uplPost.message,
-                title:uplPost.title,
-                subTitle:uplPost.subTitle,
-                dateTaken:uplPost.dateTaken
-              },
-              geometry: {
-                coordinates: [],
-                type: "Point"
-              }
-            };  
-            newPost.geometry.coordinates.push(fields.lat);
-            newPost.geometry.coordinates.push(fields.lng);
-            console.log(newPost);
+                message: fields.message,
+                title:fields.title,
+                subTitle:fields.subTitle,
+                dateTaken:dateTaken
+         },
+         geometry: {
+          coordinates: [],
+          type: "Point"
+        }
+      };  
+      newPost.geometry.coordinates.push(fields.lat);
+      newPost.geometry.coordinates.push(fields.lng);
+      console.log(newPost);
 
 
-            thumbnail.ensureThumbnail(file_name + '.' + file_ext,100,null, function (err, filename) {
-              console.log(err);
-            });
-            return Post.create(newPost)
-            .then(respondWithResult(res, 201))
-            .catch(handleError(res));
+      thumbnail.ensureThumbnail(file_name + '.' + file_ext,100,null, function (err, filename) {
+        console.log(err);
+      });
+
+      return Post.create(newPost)
+      .then(respondWithResult(res, 201))
+      .catch(handleError(res));
 
             // res.status(200);
             // res.json({
