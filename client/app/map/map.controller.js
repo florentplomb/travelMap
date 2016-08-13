@@ -6,7 +6,7 @@ appMap.config(function($logProvider){
   $logProvider.debugEnabled(false);
 });
 
-appMap.controller('MapCtrl', function($scope, $state,$http,$filter) {
+appMap.controller('MapCtrl', function($scope, $state,$http,$filter,apiUrl) {
 
 
    $scope.markers = [];
@@ -32,7 +32,7 @@ appMap.controller('MapCtrl', function($scope, $state,$http,$filter) {
 
     $http({
         method: 'GET',
-        url: "http://localhost:9000/api/posts",
+        url: apiUrl+"/posts",
         headers: {
             'login_token': 'login YmVlcDpi'
         }
@@ -45,10 +45,11 @@ appMap.controller('MapCtrl', function($scope, $state,$http,$filter) {
             $scope.markers.push({
                 lng: Number(-+post.geometry.coordinates[1]), 
                 lat: Number(post.geometry.coordinates[0]),
-                message: '<div class="clickable" ng-click="getPostSide(post._id)"> <img ng-src="http://localhost:9000/api/images/{{post.properties.imageId}}-100.{{post.properties.imageExt}}" width="70px;"/> </div> ',
+                message: '<div class="clickable" ng-click="getPostSide(post._id)"> <img ng-src="{{apiUrl}}/images/{{post.properties.imageId}}-100.{{post.properties.imageExt}}" width="70px;"/> </div> ',
                 imageId: post.properties.imageId,
                 getMessageScope: function() {
                     var scope = $scope.$new();
+                    scope.apiUrl = apiUrl;
                     scope.post = post;
                     return scope;
                 }});   
@@ -64,7 +65,7 @@ appMap.controller('MapCtrl', function($scope, $state,$http,$filter) {
 
         var postFound = $filter('getById')($scope.rawPosts, postId);
         console.log(postFound);
-        $scope.sideCard.image = "http://localhost:9000/api/images/"+postFound.properties.imageId+"."+postFound.properties.imageExt;
+        $scope.sideCard.image = apiUrl+"/images/"+postFound.properties.imageId+"."+postFound.properties.imageExt;
         $scope.sideCard.title = "Big Island";
         $scope.sideCard.subTitle = postFound.properties.subTitle;
         $scope.sideCard.message = postFound.properties.message;

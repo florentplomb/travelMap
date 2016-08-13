@@ -2,7 +2,7 @@
 
 var appUploadImg = angular.module('travelMapApp');
 
-appUploadImg.controller('uploadImgCtrl', function($scope,Upload,$http,$timeout){
+appUploadImg.controller('uploadImgCtrl', function($scope,Upload,$http,$timeout,apiUrl){
 
 $scope.uplPost = {};
 $scope.uplPost.title = "titleloo";
@@ -22,7 +22,7 @@ $scope.uplPost.message = "messs2";
    
   
     file.upload = Upload.upload({
-      url: 'http://localhost:9000/api/posts',
+      url: apiUrl+"/posts",
       data: {title: $scope.uplPost.title , subTitle: $scope.uplPost.subTitle, dateTaken : $scope.uplPost.dateTaken
       ,message : $scope.uplPost.message, lat : $scope.lat, lng: $scope.lng , file: file},
     });

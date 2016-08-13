@@ -6,7 +6,7 @@ angular.module('travelMapApp', ['travelMapApp.auth', 'travelMapApp.admin', 'trav
   ])
   .config(function($urlRouterProvider, $locationProvider,$httpProvider) {
 
-
+  	
     $httpProvider.defaults.headers.get = { 'Florent' : '27ans' }; // test ok pour le header!
 
     $urlRouterProvider.otherwise('/');
