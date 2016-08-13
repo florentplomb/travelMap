@@ -11,7 +11,8 @@
     <br>SubTitle
     <input type="text" name="subTitle" ng-model="uplPost.subTitle">
     <br>Message:
-    <textarea type="text" name="message" ng-model="uplPost.message"/>
+    <textarea type="text" rows="8" cols="60" name="message" ng-model="uplPost.message">
+    </textarea>
     <br>Photo:
     <input type="file" ngf-select ng-model="picFile" name="file"    
     accept="image/*" ngf-max-size="2MB" required
