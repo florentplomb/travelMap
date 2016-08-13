@@ -5,6 +5,6 @@ angular.module('travelMapApp')
     $stateProvider
       .state('uploadImg', {
         url: '/uploadImg',
-        templateUrl: 'app/uploadImg//uploadImg.html'
+        templateUrl: 'app/uploadImg/uploadImg.html'
       });
   });
