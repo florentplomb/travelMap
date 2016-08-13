@@ -33,15 +33,15 @@
     <br>
   </form>
 
-  <div class="wrapper">
+<div class="wrapper">
 
-    <div class="card radius shadowDepth1">
-     <div class="card__image border-tlr-radius">
-      <img src="picFile" alt="image" class="border-tlr-radius">
-    </div>
+  <div class="card radius shadowDepth1">
+    <div class="card__image border-tlr-radius">
+     <img src="picFile" alt="image" class="border-tlr-radius">
+   </div>
 
-    <div class="card__content card__padding">
-                   <!--  <div class="card__share">
+   <div class="card__content card__padding">
+                  <!--   <div class="card__share">
                         <div class="card__social">  
                             <a class="share-icon facebook" href="#"><span class="fa fa-facebook"></span></a>
                             <a class="share-icon twitter" href="#"><span class="fa fa-twitter"></span></a>
@@ -52,28 +52,36 @@
                       </div> -->
 
                       <div class="card__meta">
-                       <a href="#">{{uplPost.title}}</a>
-                       <time>{{uplPost.dateTaken | date:'mediumDate'}}</time>
-                     </div>
+                        <a href="#">{{uplPost.title}}</a>
+                        <time>{{uplPost.dateTaken | date:'mediumDate'}}</time>
+                      </div>
 
-                     <article class="card__article">
-                       <h2><a href="#">{{uplPost.subTitle}}</a></h2>
-
+                      <article class="card__article">
+                         <h2><a href="#">{{uplPost.subTitle}}</a></h2>
                        <p>{{uplPost.message}}</p>
-                     </article>
-                   </div>
+                      </article>
+                    </div>
 
-                   <div class="card__action">
+                    <div class="card__action">
 
-                    <div class="card__author">
-                     <img src="" alt="user">
-                     <div class="card__author-content">
-                      By <a href="#">{{sideCard.user}}</a>
+                      <div class="card__author">
+                        <img src="" alt="user">
+                        <div class="card__author-content">
+                          By <a href="#">{{sideCard.user}}</a>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
+
+
+
                 </div>
-              </div>
-            </div>
 
 
-          </div>
+
+</div>
+
+
+
+
