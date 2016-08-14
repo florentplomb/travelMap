@@ -22,10 +22,6 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _image = require('../image/image.model');
-
-var _image2 = _interopRequireDefault(_image);
-
 var _post = require('./post.model');
 
 var _post2 = _interopRequireDefault(_post);
@@ -40,7 +36,10 @@ var crypto = require('crypto'),
     http = require('http'),
     formidable = require('formidable'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    uuid = require('node-uuid'),
+    Thumbnail = require('thumbnail'),
+    thumbnail = new Thumbnail(_environment2.default.root + '/server/upload', _environment2.default.root + '/server/upload');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -105,38 +104,59 @@ function create(req, res) {
 
     var date = fields.dateTaken.toString().replace(/:/, "-"); // moche mais pas le temps pour une expr- regulière
     var dateTaken = date.replace(/:/, "-");
-    var old_path = files.file.path;
-    var newImage = new _image2.default();
-    newImage.img.data = fs.readFileSync(old_path);
-    newImage.img.contentType = 'image/png';
-    newImage.save(function (err, imageSaved) {
-      if (err) console.log(err);
+    console.log(dateTaken);
 
-      console.log(imageSaved);
+    var old_path = files.file.path,
+        file_size = files.file.size,
+        file_ext = files.file.name.split('.').pop(),
+        file_name = uuid.v1(),
+        new_path = 'server/upload/' + file_name + '.' + file_ext; // Generate a v1 (time-based) id , v4 (random)
+    // new_path = path.join(process.env.PWD, '/upload', file_name + '.' + file_ext);
+    console.log(new_path.toString());
+    fs.readFile(old_path, function (err, data) {
+      fs.writeFile(new_path.toString(), data, function (err) {
+        fs.unlink(old_path, function (err) {
+          if (err) {
+            res.status(500);
+            res.json({
+              'success': false
+            });
+          } else {
 
-      var newPost = {
-        type: 'Feature',
-        active: true,
-        properties: {
-          user: "57a2ac6cb4914f5818dc05c5",
-          message: fields.message,
-          image: [],
-          title: fields.title,
-          subTitle: fields.subTitle,
-          dateTaken: dateTaken
-        },
-        geometry: {
-          coordinates: [],
-          type: "Point"
-        }
-      };
-      newPost.geometry.coordinates.push(fields.lat);
-      newPost.geometry.coordinates.push(fields.lng);
-      newPost.properties.image.push(imageSaved._id);
+            var newPost = {
+              type: 'Feature',
+              active: true,
+              properties: {
+                user: "57a2ac6cb4914f5818dc05c5",
+                imageId: file_name,
+                imageExt: file_ext,
+                message: fields.message,
+                title: fields.title,
+                subTitle: fields.subTitle,
+                dateTaken: dateTaken
+              },
+              geometry: {
+                coordinates: [],
+                type: "Point"
+              }
+            };
+            newPost.geometry.coordinates.push(fields.lat);
+            newPost.geometry.coordinates.push(fields.lng);
+            console.log(newPost);
 
-      //console.log(newPost);
+            thumbnail.ensureThumbnail(file_name + '.' + file_ext, 100, null, function (err, filename) {
+              console.log(err);
+            });
 
-      return _post2.default.create(newPost).then(respondWithResult(res, 201)).catch(handleError(res));
+            return _post2.default.create(newPost).then(respondWithResult(res, 201)).catch(handleError(res));
+
+            // res.status(200);
+            // res.json({
+            //   'success': true
+            // });
+          }
+        });
+      });
     });
   });
 }

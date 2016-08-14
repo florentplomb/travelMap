@@ -26,11 +26,9 @@ var _environment = require('../../config/environment');
 
 var _environment2 = _interopRequireDefault(_environment);
 
-var _image = require('./image.model');
-
-var _image2 = _interopRequireDefault(_image);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//import Image from './image.model';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -87,19 +85,11 @@ function index(req, res) {
 
 // Gets a single Image from the DB
 function show(req, res) {
-
-  _image2.default.findById(req.params.id, function (err, doc) {
-    if (err) return res.status(404).end();
-    res.contentType(doc.img.contentType);
-    res.send(doc.img.data);
-    return res;
-  });
-
   // return Image.findById(req.params.id).exec()
   //   .then(handleEntityNotFound(res))
   //   .then(respondWithResult(res))
   //   .catch(handleError(res));
-
+  return res.sendFile(_environment2.default.root + '/server/upload/' + req.params.id);
 }
 
 // Creates a new Image in the DB
