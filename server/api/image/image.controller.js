@@ -7,11 +7,11 @@
  * DELETE  /api/images/:id          ->  destroy
  */
 
-'use strict';
+ 'use strict';
 
-import _ from 'lodash';
-import config from '../../config/environment';
-//import Image from './image.model';
+ import _ from 'lodash';
+ import config from '../../config/environment';
+import Image from './image.model';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -26,9 +26,9 @@ function saveUpdates(updates) {
   return function(entity) {
     var updated = _.merge(entity, updates);
     return updated.save()
-      .then(updated => {
-        return updated;
-      });
+    .then(updated => {
+      return updated;
+    });
   };
 }
 
@@ -36,9 +36,9 @@ function removeEntity(res) {
   return function(entity) {
     if (entity) {
       return entity.remove()
-        .then(() => {
-          res.status(204).end();
-        });
+      .then(() => {
+        res.status(204).end();
+      });
     }
   };
 }
@@ -65,16 +65,20 @@ export function index(req, res) {
   // return Image.find().exec()
   //   .then(respondWithResult(res))
   //   .catch(handleError(res));
-   return res.status(204).end();
+  return res.status(204).end();
 }
 
 // Gets a single Image from the DB
 export function show(req, res) {
-  // return Image.findById(req.params.id).exec()
+ Image.findById(req.params.id,function (err, doc) {
+  if (err) return res.status(404).end();;
+  res.contentType(doc.img.contentType);
+  return res.send(doc.img.data);
+});
+
   //   .then(handleEntityNotFound(res))
   //   .then(respondWithResult(res))
   //   .catch(handleError(res));
-  return res.sendFile(config.root+'/server/upload/'+req.params.id);
 }
 
 // Creates a new Image in the DB

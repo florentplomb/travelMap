@@ -9,11 +9,11 @@ appMap.config(function($logProvider){
 appMap.controller('MapCtrl', function($scope, $state,$http,$filter,apiUrl) {
 
 
-   $scope.markers = [];
-   $scope.sideCard = {};
+ $scope.markers = [];
+ $scope.sideCard = {};
 
 
-   $scope.london = {
+ $scope.london = {
     lat: 19.594725484073255,
     lng: -155.41534423828125,
     zoom: 9
@@ -40,12 +40,13 @@ appMap.controller('MapCtrl', function($scope, $state,$http,$filter,apiUrl) {
     .success(function(posts) {
 
         $scope.rawPosts = posts;
-        console.log(posts);
+        var postFocus;
         angular.forEach(posts, function(post, key) {
             $scope.markers.push({
                 lng: Number(-+post.geometry.coordinates[1]), 
                 lat: Number(post.geometry.coordinates[0]),
-                message: '<div class="clickable" ng-click="getPostSide(post._id)"> <img ng-src="{{apiUrl}}/images/{{post.properties.imageId}}-100.{{post.properties.imageExt}}" width="70px;"/> </div> ',
+                focus:true,
+                message: '<div class="clickable" ng-click="getPostSide(post._id)"> <img ng-src="{{apiUrl}}/images/{{post.properties.image[0]}}" width="70px;"/> </div> ',
                 imageId: post.properties.imageId,
                 getMessageScope: function() {
                     var scope = $scope.$new();
@@ -53,9 +54,13 @@ appMap.controller('MapCtrl', function($scope, $state,$http,$filter,apiUrl) {
                     scope.post = post;
                     return scope;
                 }});   
-            console.log($scope.markers);
+            postFocus = post._id;
+            console.log(postFocus);
         });
-    })
+        if (posts.length > 0) {
+            $scope.getPostSide(postFocus); }
+
+        })
     .error(function(data) {
         alert(data);
     });
@@ -65,7 +70,7 @@ appMap.controller('MapCtrl', function($scope, $state,$http,$filter,apiUrl) {
 
         var postFound = $filter('getById')($scope.rawPosts, postId);
         console.log(postFound);
-        $scope.sideCard.image = apiUrl+"/images/"+postFound.properties.imageId+"."+postFound.properties.imageExt;
+        $scope.sideCard.image = apiUrl+"/images/"+postFound.properties.image[0];
         $scope.sideCard.title = "Big Island";
         $scope.sideCard.subTitle = postFound.properties.subTitle;
         $scope.sideCard.message = postFound.properties.message;
