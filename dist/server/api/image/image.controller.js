@@ -26,9 +26,11 @@ var _environment = require('../../config/environment');
 
 var _environment2 = _interopRequireDefault(_environment);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _image = require('./image.model');
 
-//import Image from './image.model';
+var _image2 = _interopRequireDefault(_image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -85,11 +87,15 @@ function index(req, res) {
 
 // Gets a single Image from the DB
 function show(req, res) {
-  // return Image.findById(req.params.id).exec()
+  _image2.default.findById(req.params.id, function (err, doc) {
+    if (err) return res.status(404).end();;
+    res.contentType(doc.img.contentType);
+    return res.send(doc.img.data);
+  });
+
   //   .then(handleEntityNotFound(res))
   //   .then(respondWithResult(res))
   //   .catch(handleError(res));
-  return res.sendFile(_environment2.default.root + '/server/upload/' + req.params.id);
 }
 
 // Creates a new Image in the DB
