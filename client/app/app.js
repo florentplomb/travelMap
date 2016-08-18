@@ -2,7 +2,7 @@
 
 angular.module('travelMapApp', ['travelMapApp.auth', 'travelMapApp.admin', 'travelMapApp.constants',
     'ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'validation.match','leaflet-directive'
-    ,'ngFileUpload'
+    ,'ngFileUpload','ui.bootstrap'
   ])
   .config(function($urlRouterProvider, $locationProvider,$httpProvider) {
 

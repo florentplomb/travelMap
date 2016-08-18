@@ -6,7 +6,8 @@ appMap.config(function($logProvider){
   $logProvider.debugEnabled(false);
 });
 
-appMap.controller('MapCtrl', function($scope, $state,$http,$filter,apiUrl) {
+
+appMap.controller('MapCtrl', function($scope, $state,$http,$filter,apiUrl,$uibModal) {
 
 
  $scope.markers = [];
@@ -16,8 +17,32 @@ appMap.controller('MapCtrl', function($scope, $state,$http,$filter,apiUrl) {
  $scope.london = {
     lat: 19.594725484073255,
     lng: -155.41534423828125,
-    zoom: 9
+    zoom: 8
 };
+
+$scope.layers = {
+    baselayers: {
+
+       googleHybrid: {
+        name: 'Google Map',
+        layerType: 'HYBRID',
+        type: 'google'
+    },
+    googleRoadmap: {
+        name: 'Google Streets',
+        layerType: 'ROADMAP',
+        type: 'google'
+    },
+    osm: {
+        name: 'OpenStreetMap',
+        url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        type: 'xyz'
+    }
+}
+}
+
+
+
 
     //    $scope.markers = {
     //     m1: {
@@ -46,14 +71,19 @@ appMap.controller('MapCtrl', function($scope, $state,$http,$filter,apiUrl) {
                 lng: Number(-+post.geometry.coordinates[1]), 
                 lat: Number(post.geometry.coordinates[0]),
                 focus:true,
-                message: '<div class="clickable" ng-click="getPostSide(post._id)"> <img ng-src="{{apiUrl}}/images/{{post.properties.image[0]}}" width="70px;"/> </div> ',
-                imageId: post.properties.imageId,
-                getMessageScope: function() {
-                    var scope = $scope.$new();
-                    scope.apiUrl = apiUrl;
-                    scope.post = post;
-                    return scope;
-                }});   
+                icon : {
+                  type: 'awesomeMarker',
+                  icon: 'star',
+                  markerColor: 'orange'
+              },
+              message: '<div class="clickable" ng-click="getPostSide(post._id)"> <img ng-src="{{apiUrl}}/images/{{post.properties.image[0]}}" width="70px;"/> </div> ',
+              imageId: post.properties.imageId,
+              getMessageScope: function() {
+                var scope = $scope.$new();
+                scope.apiUrl = apiUrl;
+                scope.post = post;
+                return scope;
+            }});   
             postFocus = post._id;
             console.log(postFocus);
         });
@@ -84,7 +114,43 @@ appMap.controller('MapCtrl', function($scope, $state,$http,$filter,apiUrl) {
 
     };
 
-})
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+
+
+    /// Open Modal ///
+
+    $scope.open = function () {
+
+        var modalInstance = $uibModal.open({
+          animation: $scope.animationsEnabled,
+          templateUrl: 'myModalContent.html',
+          controller: 'ModalInstanceCtrl',
+          windowClass: 'app-modal-window',
+          resolve: {
+            sideCard: function () {
+              return $scope.sideCard;
+          }
+      }
+  });
+
+
+    }
+
+});
+
+appMap.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,sideCard) {
+    console.log(sideCard);
+
+   $scope.sideCard = sideCard; 
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+};
+});
+
+
 
 // Filter pour chercher dans mon array de posts un post avec un certain ID
 

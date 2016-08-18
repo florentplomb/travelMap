@@ -1,22 +1,24 @@
 
 <span ng-controller="MapCtrl">
 
-    <div id="map">
+  <div id="map">
 
-       <leaflet   height="100%" markers="markers" lf-center="london"></leaflet>
+   <leaflet  layers="layers" height="100%" markers="markers" lf-center="london"></leaflet>
 
+ </div>
+
+ <div id="mapSide" >
+
+  <div class="wrapper">
+
+    <div class="card radius shadowDepth1">
+     <div class="card__image border-tlr-radius">
+       <div>
+       <img ng-click="open()"  ng-src="{{sideCard.image}}" alt="image" class="border-tlr-radius clickable opacity">
+     </div>
    </div>
 
-   <div id="mapSide" >
-
-    <div class="wrapper">
-      
-      <div class="card radius shadowDepth1">
-         <div class="card__image border-tlr-radius">
-            <img ng-src="{{sideCard.image}}" alt="image" class="border-tlr-radius">
-        </div>
-
-        <div class="card__content card__padding">
+   <div class="card__content card__padding">
                    <!--  <div class="card__share">
                         <div class="card__social">  
                             <a class="share-icon facebook" href="#"><span class="fa fa-facebook"></span></a>
@@ -25,38 +27,53 @@
                         </div>
 
                         <a id="share" class="share-toggle share-icon" href="#"></a>
-                    </div> -->
+                      </div> -->
 
-                    <div class="card__meta">
+                      <div class="card__meta">
                        <a href="#">{{sideCard.title}}</a>
                        <time>{{sideCard.date | date:'mediumDate'}}</time>
-                   </div>
+                     </div>
 
-                   <article class="card__article">
+                     <article class="card__article">
                        <h2><a href="#">{{sideCard.subTitle}}</a></h2>
 
                        <p>{{sideCard.message}}</p>
-                   </article>
-               </div>
+                     </article>
+                   </div>
 
-               <div class="card__action">
-                
-                <div class="card__author">
-                   <img src="assets/images/flo.png" alt="user">
-                   <div class="card__author-content">
+                   <div class="card__action">
+
+                    <div class="card__author">
+                     <img src="assets/images/flo.png" alt="user">
+                     <div class="card__author-content">
                       By <a href="#">{{sideCard.user}}</a>
+                    </div>
                   </div>
+                </div>
               </div>
+            </div>
+
+
+
+
           </div>
-      </div>
-  </div>
 
 
+    <script type="text/ng-template" id="myModalContent.html">
+    <button type='button' class='close' style='color: white; margin-right:0.3em; font-size:50px' data-dismiss='modal' ng-click="cancel()">×</button>
+    <!--     <div class="modal-header">
+            <h3 class="modal-title">I'm a modal!</h3>
+        </div>
+        <div class="modal-body">
+            <img ng-src="{{sideCard.image}}" alt="image">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+ -->
+        <img id="fullImg" ng-src="{{sideCard.image}}" alt="image" width="100%">
+    </script>
 
-
-</div>
-
-
-</span>
+        </span>
 
 

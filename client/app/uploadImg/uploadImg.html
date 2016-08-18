@@ -6,6 +6,11 @@
  <form name="myForm">
   <fieldset>
     <legend>Upload on form submit</legend>
+    <br>lat
+    <input type="text" name="title" ng-model="latIn">
+    <br>lng
+    <input type="text" name="title" ng-model="lngIn">
+
     <br>Title
     <input type="text" name="title" ng-model="uplPost.title">
     <br>SubTitle
@@ -15,7 +20,7 @@
     </textarea>
     <br>Photo:
     <input type="file" ngf-select ng-model="picFile" name="file"    
-    accept="image/*" ngf-max-size="2MB" required
+    accept="image/*" ngf-max-size="4MB" required
     ngf-model-invalid="errorFile">
     <i ng-show="myForm.file.$error.required">*required</i><br>
     <i ng-show="myForm.file.$error.maxSize">File too large 
@@ -34,14 +39,14 @@
     <br>
   </form>
 
-<div class="wrapper">
+  <div class="wrapper">
 
-  <div class="card radius shadowDepth1">
-    <div class="card__image border-tlr-radius">
-     <img src="picFile" alt="image" class="border-tlr-radius">
-   </div>
+    <div class="card radius shadowDepth1">
+      <div class="card__image border-tlr-radius">
+       <img src="{{picFile}}" alt="image" class="border-tlr-radius">
+     </div>
 
-   <div class="card__content card__padding">
+     <div class="card__content card__padding">
                   <!--   <div class="card__share">
                         <div class="card__social">  
                             <a class="share-icon facebook" href="#"><span class="fa fa-facebook"></span></a>
@@ -58,30 +63,30 @@
                       </div>
 
                       <article class="card__article">
-                         <h2><a href="#">{{uplPost.subTitle}}</a></h2>
+                       <h2><a href="#">{{uplPost.subTitle}}</a></h2>
                        <p>{{uplPost.message}}</p>
-                      </article>
-                    </div>
+                     </article>
+                   </div>
 
-                    <div class="card__action">
+                   <div class="card__action">
 
-                      <div class="card__author">
-                        <img src="" alt="user">
-                        <div class="card__author-content">
-                          By <a href="#">{{sideCard.user}}</a>
-                        </div>
+                    <div class="card__author">
+                      <img src="" alt="user">
+                      <div class="card__author-content">
+                        By <a href="#">{{sideCard.user}}</a>
                       </div>
                     </div>
                   </div>
-
-
-
-
                 </div>
 
 
 
-</div>
+
+              </div>
+
+
+
+            </div>
 
 
 

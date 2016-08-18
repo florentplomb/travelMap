@@ -11,7 +11,7 @@
 
  import _ from 'lodash';
  import config from '../../config/environment';
-import Image from './image.model';
+ import Image from './image.model';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;

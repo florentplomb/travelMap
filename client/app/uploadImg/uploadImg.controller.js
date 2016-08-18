@@ -8,17 +8,38 @@ $scope.uplPost = {};
 $scope.uplPost.title = "titleloo";
 $scope.uplPost.subTitle = "subbbtille";
 $scope.uplPost.message = "messs2";
+
+
+$scope.$watch($scope.picFile, function(){
+    console.log($scope.picFile);
+});
+
+
+
  $scope.uploadPic = function(file) {
 
  
   EXIF.getData(file, function(){
 
+    var lati = EXIF.getTag(this, "GPSLatitude");
+    var longi = EXIF.getTag(this, "GPSLongitude");
+
+    if (!lati || !longi) {
+      $scope.lat = $scope.latIn;
+      $scope.lng = $scope.lngIn;
+
+    } else {
+
     $scope.lat = toDecimal(EXIF.getTag(this, "GPSLatitude"));
     $scope.lng = toDecimal(EXIF.getTag(this, "GPSLongitude"));
+    }
+
+ 
+
     $scope.uplPost.dateTaken = EXIF.getTag(this, "DateTimeOriginal");
-  // console.log($scope.uplPost.dateTaken);
+ 
    
-   
+   console.log($scope.lng);
    
   
     file.upload = Upload.upload({
