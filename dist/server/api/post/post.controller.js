@@ -112,8 +112,6 @@ function create(req, res) {
     newImage.save(function (err, imageSaved) {
       if (err) console.log(err);
 
-      console.log(imageSaved);
-
       var newPost = {
         type: 'Feature',
         active: true,
