@@ -13,7 +13,6 @@ exports.default = function (app) {
 
   if (env === 'development' || env === 'test') {
     app.use(_express2.default.static(_path2.default.join(_environment2.default.root, '.tmp')));
-    app.use(_express2.default.static(_path2.default.join(_environment2.default.root, '/server/upload')));
   }
 
   if (env === 'production') {

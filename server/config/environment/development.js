@@ -6,8 +6,8 @@ module.exports = {
 
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://127.0.0.1/travelmap-dev' // wihtout internet connection
-  //  uri: 'mongodb://localhost/travelmap-dev' 
+   // uri: 'mongodb://127.0.0.1/travelmap-dev' // wihtout internet connection
+   uri: 'mongodb://localhost/travelmap-dev' 
   },
 
   // Seed database on startup
