@@ -6,4 +6,4 @@ angular.module('travelMapApp')
   //     url: '/',
   //     template: '<main></main>'
   //   });
-  });
+  // });
