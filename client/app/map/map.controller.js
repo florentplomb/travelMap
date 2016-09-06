@@ -76,7 +76,7 @@ $scope.layers = {
                   icon: 'star',
                   markerColor: 'orange'
               },
-              message: '<div class="clickable" ng-click="getPostSide(post._id)"> <img ng-src="{{apiUrl}}/images/{{post.properties.image[0]}}" width="70px;"/> </div> ',
+              message: '<div class="clickable" ng-click="getPostSide(post._id)"> <img ng-src="{{apiUrl}}/images/{{post.properties.image[0].thumb}}" width="70px;"/> </div> ',
               imageId: post.properties.imageId,
               getMessageScope: function() {
                 var scope = $scope.$new();
@@ -100,7 +100,7 @@ $scope.layers = {
 
         var postFound = $filter('getById')($scope.rawPosts, postId);
         console.log(postFound);
-        $scope.sideCard.image = apiUrl+"/images/"+postFound.properties.image[0];
+        $scope.sideCard.image = apiUrl+"/images/"+postFound.properties.image[0]._id;
         $scope.sideCard.title = "Big Island";
         $scope.sideCard.subTitle = postFound.properties.subTitle;
         $scope.sideCard.message = postFound.properties.message;
@@ -143,7 +143,6 @@ $scope.layers = {
 
 appMap.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,sideCard) {
     console.log(sideCard);
-
    $scope.sideCard = sideCard; 
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');

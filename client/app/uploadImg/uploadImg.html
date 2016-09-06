@@ -2,14 +2,16 @@
 
 <div ng-controller="uploadImgCtrl">
 
+<div id="postInput">
+  
 
  <form name="myForm">
   <fieldset>
     <legend>Upload on form submit</legend>
     <br>lat
-    <input type="text" name="title" ng-model="latIn">
+    <input type="text" name="lat" ng-model="lat">
     <br>lng
-    <input type="text" name="title" ng-model="lngIn">
+    <input type="text" name="lng" ng-model="lng">
 
     <br>Title
     <input type="text" name="title" ng-model="uplPost.title">
@@ -19,13 +21,16 @@
     <textarea type="text" rows="8" cols="60" name="message" ng-model="uplPost.message">
     </textarea>
     <br>Photo:
+
     <input type="file" ngf-select ng-model="picFile" name="file"    
     accept="image/*" ngf-max-size="4MB" required
-    ngf-model-invalid="errorFile">
+    ngf-model-invalid="errorFile" ngf-change="change(picFile)">
+
+
     <i ng-show="myForm.file.$error.required">*required</i><br>
     <i ng-show="myForm.file.$error.maxSize">File too large 
       {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
-      <img ng-show="myForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+      <button ng-click="picFile = null" ng-show="picFile">Remove</button>
       <br>
       <button ng-disabled="!myForm.$valid" 
       ng-click="uploadPic(picFile)">Submit</button>
@@ -39,54 +44,69 @@
     <br>
   </form>
 
-  <div class="wrapper">
 
-    <div class="card radius shadowDepth1">
-      <div class="card__image border-tlr-radius">
-       <img src="{{picFile}}" alt="image" class="border-tlr-radius">
+
+ <form name="myForm2">
+ <input type="file" ngf-select ng-model="thumb" name="thumb"    
+    accept="image/*" ngf-max-size="4MB" required
+    ngf-model-invalid="errorFile" ngf-resize="{width: 300, height: 300}" >
+
+
+    <i ng-show="myForm2.file.$error.required">*required</i><br>
+    <i ng-show="myForm2.file.$error.maxSize">File too large 
+      {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+      <button ng-click="thumb = null" ng-show="thumb">Remove</button>
+      <br>
+      <button ng-show="imgThumbId" ng-disabled="!myForm2.$valid" 
+      ng-click="uploadThumb(thumb)">thumb</button>
+      <span class="progress" ng-show="thumb.progress >= 0">
+        <div style="width:{{picFile.progress}}%" 
+        ng-bind="thumb.progress + '%'"></div>
+
+  </form>
+  <div id="postPreview">
+
+    <div class="wrapper">
+
+      <div class="card radius shadowDepth1">
+       <div class="card__image border-tlr-radius">
+         <div>
+           <img ng-click="open()"  ngf-src="picFile" alt="image" class="border-tlr-radius clickable opacity">
+         </div>
+       </div>
+
+       <div class="card__content card__padding">
+
+        <div class="card__meta">
+         <a href="#">{{uplPost.title}}</a>
+         <time>{{uplPost.date | date:'mediumDate'}}</time>
+       </div>
+
+       <article class="card__article">
+         <h2><a href="#">{{uplPost.subTitle}}</a></h2>
+
+         <p>{{uplPost.message}}</p>
+       </article>
      </div>
 
-     <div class="card__content card__padding">
-                  <!--   <div class="card__share">
-                        <div class="card__social">  
-                            <a class="share-icon facebook" href="#"><span class="fa fa-facebook"></span></a>
-                            <a class="share-icon twitter" href="#"><span class="fa fa-twitter"></span></a>
-                            <a class="share-icon googleplus" href="#"><span class="fa fa-google-plus"></span></a>
-                        </div>
+     <div class="card__action">
 
-                        <a id="share" class="share-toggle share-icon" href="#"></a>
-                      </div> -->
+      <div class="card__author">
+       <img src="assets/images/flo.png" alt="user">
+       <div class="card__author-content">
+        By <a href="#">{{uplPost.user}}</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 
-                      <div class="card__meta">
-                        <a href="#">{{uplPost.title}}</a>
-                        <time>{{uplPost.dateTaken | date:'mediumDate'}}</time>
-                      </div>
-
-                      <article class="card__article">
-                       <h2><a href="#">{{uplPost.subTitle}}</a></h2>
-                       <p>{{uplPost.message}}</p>
-                     </article>
-                   </div>
-
-                   <div class="card__action">
-
-                    <div class="card__author">
-                      <img src="" alt="user">
-                      <div class="card__author-content">
-                        By <a href="#">{{sideCard.user}}</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+</div>
 
 
+</div>
 
 
-              </div>
-
-
-
-            </div>
 
 
 

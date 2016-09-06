@@ -13,7 +13,12 @@
  import config from '../../config/environment';
  import Image from './image.model';
 
-function respondWithResult(res, statusCode) {
+ var formidable = require('formidable'),
+ fs = require('fs'),
+ path = require('path');
+
+
+ function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
     if (entity) {
@@ -87,6 +92,27 @@ export function create(req, res) {
   //   .then(respondWithResult(res, 201))
   //   .catch(handleError(res));
 }
+
+
+// Creates a new Image in the DB
+export function createThumb(req, res) {
+ var form = new formidable.IncomingForm();
+ form.parse(req, function(err, fields, files) {
+
+   var old_path = files.file.path;
+   var newThumb = new Image();
+   newThumb.img.data = fs.readFileSync(old_path);
+   newThumb.img.contentType = 'image/png';
+   console.log(fields.imgThumbId);
+   newThumb.save(function(err, thumbSaved) {
+    var query = { _id: fields.imgThumbId };
+    Image.findOneAndUpdate(query, {$set:{ thumb: thumbSaved._id }}, {new: true}, function (err, fullImg) {
+      if (err) return res.status(404).send(err);
+      return res.status(200).send(fullImg);
+    })
+  })
+ }) 
+} 
 
 // Updates an existing Image in the DB
 export function update(req, res) {
