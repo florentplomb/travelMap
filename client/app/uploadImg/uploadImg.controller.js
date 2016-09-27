@@ -5,7 +5,7 @@ var appUploadImg = angular.module('travelMapApp');
 appUploadImg.controller('uploadImgCtrl', function($scope,Upload,$http,$timeout,apiUrl){
 
   $scope.uplPost = {};
-  $scope.uplPost.title = "titleloo";
+  $scope.uplPost.title = "Big Island";
   $scope.uplPost.subTitle = "subbbtille";
   $scope.uplPost.message = "messs2";
 
