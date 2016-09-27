@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.index = index;
 exports.show = show;
 exports.create = create;
+exports.createThumb = createThumb;
 exports.update = update;
 exports.destroy = destroy;
 
@@ -31,6 +32,10 @@ var _image = require('./image.model');
 var _image2 = _interopRequireDefault(_image);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var formidable = require('formidable'),
+    fs = require('fs'),
+    path = require('path');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -104,6 +109,26 @@ function create(req, res) {}
 //   .then(respondWithResult(res, 201))
 //   .catch(handleError(res));
 
+
+// Creates a new Image in the DB
+function createThumb(req, res) {
+  var form = new formidable.IncomingForm();
+  form.parse(req, function (err, fields, files) {
+
+    var old_path = files.file.path;
+    var newThumb = new _image2.default();
+    newThumb.img.data = fs.readFileSync(old_path);
+    newThumb.img.contentType = 'image/png';
+    console.log(fields.imgThumbId);
+    newThumb.save(function (err, thumbSaved) {
+      var query = { _id: fields.imgThumbId };
+      _image2.default.findOneAndUpdate(query, { $set: { thumb: thumbSaved._id } }, { new: true }, function (err, fullImg) {
+        if (err) return res.status(404).send(err);
+        return res.status(200).send(fullImg);
+      });
+    });
+  });
+}
 
 // Updates an existing Image in the DB
 function update(req, res) {

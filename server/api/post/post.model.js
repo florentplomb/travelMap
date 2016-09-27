@@ -11,7 +11,7 @@ var PostSchema = new mongoose.Schema({
 		user: { type: Schema.Types.ObjectId, ref: 'User' },
 		dateTaken: {type: Date},
 		image : [{ type: Schema.Types.ObjectId, ref: 'Image' }],
-		thumb : { type: Schema.Types.ObjectId, ref: 'Image' },
+	//	thumb : { type: Schema.Types.ObjectId, ref: 'Image' },
 		message:String,
 		title:String,
 		subTitle:String,

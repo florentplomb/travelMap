@@ -18,6 +18,7 @@ var PostSchema = new _mongoose2.default.Schema({
 		user: { type: _mongoose.Schema.Types.ObjectId, ref: 'User' },
 		dateTaken: { type: Date },
 		image: [{ type: _mongoose.Schema.Types.ObjectId, ref: 'Image' }],
+		//	thumb : { type: Schema.Types.ObjectId, ref: 'Image' },
 		message: String,
 		title: String,
 		subTitle: String,

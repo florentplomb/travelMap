@@ -74,7 +74,10 @@ function handleError(res, statusCode) {
 // Gets a list of Posts
 export function index(req, res) {
   return Post.find()
-  .populate('properties.image')
+  .populate({
+      path: 'properties.image',
+      select: '-img',
+    })
   .exec()
   .then(respondWithResult(res))
   .catch(handleError(res));

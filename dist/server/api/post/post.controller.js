@@ -36,6 +36,9 @@ var _environment2 = _interopRequireDefault(_environment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var imageCtrl = require('../image/image.controller.js');
+var gm = require('gm');
+
 var crypto = require('crypto'),
     http = require('http'),
     formidable = require('formidable'),
@@ -81,7 +84,8 @@ function handleEntityNotFound(res) {
 }
 
 function handleError(res, statusCode) {
-  statusCode = statusCode || 500;
+  //statusCode = statusCode || 500;
+  statusCode = 300;
   return function (err) {
     res.status(statusCode).send(err);
   };
@@ -89,7 +93,10 @@ function handleError(res, statusCode) {
 
 // Gets a list of Posts
 function index(req, res) {
-  return _post2.default.find().exec().then(respondWithResult(res)).catch(handleError(res));
+  return _post2.default.find().populate({
+    path: 'properties.image',
+    select: '-img'
+  }).exec().then(respondWithResult(res)).catch(handleError(res));
 }
 
 // Gets a single Post from the DB
@@ -99,26 +106,32 @@ function show(req, res) {
 
 // Creates a new Post in the DB
 function create(req, res) {
-
   var form = new formidable.IncomingForm();
   form.parse(req, function (err, fields, files) {
 
     var date = fields.dateTaken.toString().replace(/:/, "-"); // moche mais pas le temps pour une expr- regulière
     var dateTaken = date.replace(/:/, "-");
     var old_path = files.file.path;
+    console.log(files);
+
     var newImage = new _image2.default();
+
     newImage.img.data = fs.readFileSync(old_path);
     newImage.img.contentType = 'image/png';
-    newImage.save(function (err, imageSaved) {
-      if (err) console.log(err);
+    console.log(newImage.img.data);
 
-      var newPost = {
+    newImage.save(function (err, imageSaved) {
+
+      if (err) console.log(err);
+      var newPost = new _post2.default();
+      newPost = {
         type: 'Feature',
         active: true,
         properties: {
           user: "57a2ac6cb4914f5818dc05c5",
           message: fields.message,
           image: [],
+          // thumb : thumbSaved._id,
           title: fields.title,
           subTitle: fields.subTitle,
           dateTaken: dateTaken
@@ -132,9 +145,13 @@ function create(req, res) {
       newPost.geometry.coordinates.push(fields.lng);
       newPost.properties.image.push(imageSaved._id);
 
-      //console.log(newPost);
+      console.log(newPost);
 
-      return _post2.default.create(newPost).then(respondWithResult(res, 201)).catch(handleError(res));
+      _post2.default.create(newPost, function (err, postSaved) {
+        if (err) return res.status(404).json(err);
+
+        return res.status(200).json(postSaved);
+      });
     });
   });
 }
@@ -144,7 +161,7 @@ function update(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  return _post2.default.findById(req.params.id).exec().then(handleEntityNotFound(res)).then(saveUpdates(req.body)).then(respondWithResult(res)).catch(handleError(res));
+  return _post2.default.findById(req.params.id).exec().then(handleEntityNotFound(res, 500)).then(saveUpdates(req.body)).then(respondWithResult(res)).catch(handleError(res, 500));
 }
 
 // Deletes a Post from the DB
