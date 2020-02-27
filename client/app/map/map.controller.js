@@ -22,17 +22,6 @@ appMap.controller('MapCtrl', function($scope, $state,$http,$filter,apiUrl,$uibMo
 
 $scope.layers = {
     baselayers: {
-
-       googleHybrid: {
-        name: 'Google Map',
-        layerType: 'HYBRID',
-        type: 'google'
-    },
-    googleRoadmap: {
-        name: 'Google Streets',
-        layerType: 'ROADMAP',
-        type: 'google'
-    },
     osm: {
         name: 'OpenStreetMap',
         url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
