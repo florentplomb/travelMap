@@ -22,7 +22,7 @@
     "lodash": "^4.6.1",
     "lusca": "^1.4.1",
     "method-override": "^2.3.5",
-    "mongoose": "^4.1.2",
+    "mongoose": "^5.9.2",
     "morgan": "~1.7.0",
     "multer": "^1.1.0",
     "node-uuid": "^1.4.7",
