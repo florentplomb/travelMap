@@ -85,19 +85,11 @@
     "chai-as-promised": "^5.1.0",
     "chai-things": "^0.2.0",
     "karma": "~0.13.3",
-    "karma-firefox-launcher": "^1.0.0",
-    "karma-script-launcher": "^1.0.0",
-    "karma-chrome-launcher": "^1.0.1",
-    "karma-jade-preprocessor": "0.0.11",
-    "karma-phantomjs-launcher": "~1.0.0",
-    "karma-ng-html2js-preprocessor": "^1.0.0",
-    "karma-spec-reporter": "~0.0.20",
     "sinon-chai": "^2.8.0",
     "mocha": "^2.2.5",
     "karma-mocha": "^1.0.1",
     "karma-chai-plugins": "~0.7.0",
     "karma-babel-preprocessor": "^6.0.1",
-    "phantomjs-prebuilt": "^2.1.4",
     "proxyquire": "^1.0.1",
     "supertest": "^1.1.0"
   },
@@ -106,8 +98,6 @@
     "npm": "^6.0.0"
   },
   "scripts": {
-    "test": "grunt test",
-    "update-webdriver": "node node_modules/protractor/bin/webdriver-manager update",
     "start": "node server"
   },
   "private": true
