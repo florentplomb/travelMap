@@ -593,31 +593,31 @@ options: {
       options: {},
       // Inject application script files into index.html (doesn't include bower)
       scripts: {
-        // options: {
-        //   transform: function(filePath) {
-        //     var yoClient = grunt.config.get('yeoman.client');
-        //     filePath = filePath.replace('/' + yoClient + '/', '');
-        //     filePath = filePath.replace('/.tmp/', '');
-        //     return '<script src="' + filePath + '"></script>';
-        //   },
-        //   sort: function(a, b) {
-        //     var module = /\.module\.(js|ts)$/;
-        //     var aMod = module.test(a);
-        //     var bMod = module.test(b);
-        //     // inject *.module.js first
-        //     return (aMod === bMod) ? 0 : (aMod ? -1 : 1);
-        //   },
-        //   starttag: '<!-- injector:js -->',
-        //   endtag: '<!-- endinjector -->'
-        // },
-        // files: {
-        //   '<%= yeoman.client %>/index.html': [
-        //   [
-        //   '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
-        //   '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
-        //   ]
-        //   ]
-        // }
+        options: {
+          transform: function(filePath) {
+            var yoClient = grunt.config.get('yeoman.client');
+            filePath = filePath.replace('/' + yoClient + '/', '');
+            filePath = filePath.replace('/.tmp/', '');
+            return '<script src="' + filePath + '"></script>';
+          },
+          sort: function(a, b) {
+            var module = /\.module\.(js|ts)$/;
+            var aMod = module.test(a);
+            var bMod = module.test(b);
+            // inject *.module.js first
+            return (aMod === bMod) ? 0 : (aMod ? -1 : 1);
+          },
+          starttag: '<!-- injector:js -->',
+          endtag: '<!-- endinjector -->'
+        },
+        files: {
+          '<%= yeoman.client %>/index.html': [
+          [
+          '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
+          '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
+          ]
+          ]
+        }
       },
 
       // Inject component less into app.less
