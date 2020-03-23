@@ -287,16 +287,16 @@ options: {
     },
 
     // The following *-min tasks produce minified files in the dist folder
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.client %>/assets/images',
-        src: '{,*/}*.{png,jpg,jpeg,gif,svg}',
-        dest: '<%= yeoman.dist %>/<%= yeoman.client %>/assets/images'
-      }]
-    }
-  },
+  //   imagemin: {
+  //     dist: {
+  //       files: [{
+  //         expand: true,
+  //         cwd: '<%= yeoman.client %>/assets/images',
+  //       src: '{,*/}*.{png,jpg,jpeg,gif,svg}',
+  //       dest: '<%= yeoman.dist %>/<%= yeoman.client %>/assets/images'
+  //     }]
+  //   }
+  // },
 
     // Allow the use of non-minsafe AngularJS files. Automatically makes it
     // minsafe compatible so Uglify does not destroy the ng references
@@ -458,7 +458,7 @@ options: {
       dist: [
       'newer:babel:client',
       'less',
-      'imagemin'
+      // 'imagemin'
       ]
     },
 
@@ -593,31 +593,31 @@ options: {
       options: {},
       // Inject application script files into index.html (doesn't include bower)
       scripts: {
-        options: {
-          transform: function(filePath) {
-            var yoClient = grunt.config.get('yeoman.client');
-            filePath = filePath.replace('/' + yoClient + '/', '');
-            filePath = filePath.replace('/.tmp/', '');
-            return '<script src="' + filePath + '"></script>';
-          },
-          sort: function(a, b) {
-            var module = /\.module\.(js|ts)$/;
-            var aMod = module.test(a);
-            var bMod = module.test(b);
-            // inject *.module.js first
-            return (aMod === bMod) ? 0 : (aMod ? -1 : 1);
-          },
-          starttag: '<!-- injector:js -->',
-          endtag: '<!-- endinjector -->'
-        },
-        files: {
-          '<%= yeoman.client %>/index.html': [
-          [
-          '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
-          '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
-          ]
-          ]
-        }
+        // options: {
+        //   transform: function(filePath) {
+        //     var yoClient = grunt.config.get('yeoman.client');
+        //     filePath = filePath.replace('/' + yoClient + '/', '');
+        //     filePath = filePath.replace('/.tmp/', '');
+        //     return '<script src="' + filePath + '"></script>';
+        //   },
+        //   sort: function(a, b) {
+        //     var module = /\.module\.(js|ts)$/;
+        //     var aMod = module.test(a);
+        //     var bMod = module.test(b);
+        //     // inject *.module.js first
+        //     return (aMod === bMod) ? 0 : (aMod ? -1 : 1);
+        //   },
+        //   starttag: '<!-- injector:js -->',
+        //   endtag: '<!-- endinjector -->'
+        // },
+        // files: {
+        //   '<%= yeoman.client %>/index.html': [
+        //   [
+        //   '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
+        //   '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
+        //   ]
+        //   ]
+        // }
       },
 
       // Inject component less into app.less
